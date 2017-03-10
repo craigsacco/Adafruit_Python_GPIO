@@ -143,6 +143,30 @@ class Device(object):
                     result)
         return result
 
+    def readRawS16(self, little_endian=True):
+        """Read a signed 16-bit value on the bus (without register)."""
+        result = self.readRawU16(little_endian)
+        if result > 32767:
+            result -= 65536
+        return result
+
+    def readRawS16BE(self):
+        """Read a signed 16-bit value on the bus (without register) in big-endian format."""
+        return self.readRawS16(False)
+
+    def readRawU16(self, little_endian=True):
+        """Read an unsigned 16-bit value on the bus (without register)."""
+        bytes = self._bus.read_bytes(self._address, 2)
+        result = bytes[0] + (bytes[1] << 8)
+        self._logger.debug("Read 0x%04X", result)
+        if not little_endian:
+            result = ((result << 8) & 0xFF00) + (result >> 8)
+        return result
+
+    def readRawU16BE(self):
+        """Read an unsigned 16-bit value on the bus (without register) in big-endian format."""
+        return self.readRawU16(False)
+
     def readU8(self, register):
         """Read an unsigned byte from the specified register."""
         result = self._bus.read_byte_data(self._address, register) & 0xFF
