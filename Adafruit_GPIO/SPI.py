@@ -28,6 +28,11 @@ import Adafruit_GPIO as GPIO
 MSBFIRST = 0
 LSBFIRST = 1
 
+MODE_CPOL0_CPHA0 = 0
+MODE_CPOL0_CPHA1 = 1
+MODE_CPOL1_CPHA0 = 2
+MODE_CPOL1_CPHA1 = 3
+
 
 class SpiDev(object):
     """Hardware-based SPI implementation using the spidev interface."""
