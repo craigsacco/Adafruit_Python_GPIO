@@ -99,6 +99,14 @@ class SpiDev(object):
         """
         return bytearray(self._device.xfer2(data))
 
+    def transfer_half_duplex(self, data, in_length):
+        """Half-duplex SPI read and write.  MISO data is discarded while MOSI
+        data is clocked out, and MOSI held low while MISO data is collected
+        and returned.  Read bytes will be returned as a bytearray object.
+        """
+        buf = self._device.xfer2(data + ([0x00] * in_length))
+        return bytearray(buf[len(data):])
+
 class SpiDevMraa(object):
     """Hardware SPI implementation with the mraa library on Minnowboard"""
     def __init__(self, port, device, max_speed_hz=500000):
